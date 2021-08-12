@@ -2,7 +2,6 @@ package com.telegrambots.testBot.model;
 
 import com.telegrambots.testBot.entity.User;
 import com.telegrambots.testBot.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -10,8 +9,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -36,10 +33,12 @@ public class Handler {
             "*" + work + "*" + ": _Заменить лампы_ \n";
 
     private final UserService userService;
+    private final MessageValidator messageValidator;
 
 
-    public Handler(UserService userService) {
+    public Handler(UserService userService, MessageValidator messageValidator) {
         this.userService = userService;
+        this.messageValidator = messageValidator;
     }
 
     public BotApiMethod<?> handleStart(Message message) {
@@ -63,8 +62,7 @@ public class Handler {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(message.getChatId()));
         sendMessage.setParseMode(ParseMode.MARKDOWN);
-        sendMessage.setText("Бот ожидает информацию о заказе. \n" +
-                "Введите данные в формате \n" + templateOrder);
+        sendMessage.setText("Укажите данные в следующем формате\n" + templateOrder);
         return sendMessage;
     }
 
@@ -74,7 +72,7 @@ public class Handler {
         sendMessage.setParseMode(ParseMode.MARKDOWN);
 
         String[] split = message.getText().split("\n");
-        Map<String, String> stringStringMap = convertToMap(Arrays.asList(split));
+        Map<String, String> stringStringMap = messageValidator.convertToMap(Arrays.asList(split));
 
         User user = new User();
         if (stringStringMap.get(surname) == null
@@ -107,18 +105,5 @@ public class Handler {
         return sendMessage;
     }
 
-    public static Map<String, String> convertToMap(List<String> a) {
-        String delim = ":";
-        HashMap<String, String> orderMap = new HashMap<>();
-        a.forEach((String item) -> {
-            int pos = item.indexOf(delim);
-            if (pos == -1) {
-                return;
-            }
-            String key = item.substring(0, pos);
-            String val = item.substring(pos + delim.length());
-            orderMap.put(key, val);
-        });
-        return orderMap;
-    }
+
 }
