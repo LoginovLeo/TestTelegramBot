@@ -75,13 +75,9 @@ public class Handler {
         Map<String, String> stringStringMap = messageValidator.convertToMap(Arrays.asList(split));
 
         User user = new User();
-        if (stringStringMap.get(surname) == null
-                || stringStringMap.get(name) == null
-                || stringStringMap.get(phone) == null
-                || stringStringMap.get(address) == null
-                || stringStringMap.get(work) == null) {
+        if (messageValidator.validateOrder(stringStringMap)) {
             sendMessage.setText("Информация обязательная для заполения \n" + templateOrder +
-                    "Для продолжения введите /order и после заполните и отправьте информацию о заказе");
+                    "\n Для продолжения введите /order и после заполните и отправьте информацию о заказе");
             return sendMessage;
         }
 
