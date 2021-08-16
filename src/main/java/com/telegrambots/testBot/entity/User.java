@@ -1,6 +1,9 @@
 package com.telegrambots.testBot.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -11,18 +14,27 @@ public class User {
     private int id;
 
     @Column(name = "surname")
+    @Size(min = 2, max = 30, message = "{user.surname.invalid}")
+    @NotBlank(message = "{user.surname.NotBlank}")
     private String surname;
 
     @Column(name = "name")
+    @Size(min = 2, max = 30, message = "{user.name.invalid}")
+    @NotBlank(message = "{user.name.NotBlank}")
     private String name;
 
     @Column(name = "phone")
+    @Pattern(regexp = "^\\s*((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{5,9}$", message = "{user.phone.invalid}")
     private String phone;
 
     @Column(name = "address")
+    @Size(min = 4, max = 150, message = "{user.address.invalid}")
+    @NotBlank(message = "{user.address.NotBlank}")
     private String address;
 
     @Column(name = "work")
+    @Size(min = 5, max = 300, message = "{user.work.invalid}")
+    @NotBlank(message = "{user.work.NotBlank}")
     private String work;
 
 
