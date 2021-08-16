@@ -12,15 +12,15 @@ import java.util.*;
 public class MessageValidator {
 
     public Map<String, String> convertToMap(List<String> order) {
-        String separator = ":";
+        String delimiter = ":";
         HashMap<String, String> orderMap = new HashMap<>();
         order.forEach((String item) -> {
-            int position = item.indexOf(separator);
+            int position = item.indexOf(delimiter);
             if (position == -1) {
                 return;
             }
             String key = item.substring(0, position);
-            String val = item.substring(position + separator.length());
+            String val = item.substring(position + delimiter.length());
             orderMap.put(key, val);
         });
         return orderMap;
