@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -44,6 +45,7 @@ public class Handler {
     public BotApiMethod<?> handleStart(Message message) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(message.getChatId()));
+        sendMessage.setParseMode(ParseMode.MARKDOWN);
 
         String firstName = message.getChat().getFirstName();
         String lastName = message.getChat().getLastName();
@@ -75,17 +77,17 @@ public class Handler {
         Map<String, String> stringStringMap = messageValidator.convertToMap(Arrays.asList(split));
 
         User user = new User();
-        if (messageValidator.validateOrder(stringStringMap)) {
-            sendMessage.setText("Информация обязательная для заполения \n" + templateOrder +
-                    "\n Для продолжения введите /order и после заполните и отправьте информацию о заказе");
-            return sendMessage;
-        }
-
         user.setSurname(stringStringMap.get(surname));
         user.setName(stringStringMap.get(name));
         user.setPhone(stringStringMap.get(phone));
         user.setWork(stringStringMap.get(work));
         user.setAddress(stringStringMap.get(address));
+        List<String> strings = messageValidator.validateOrderDetails(user);
+        if (!strings.get(0).equals("All good")) {
+            sendMessage.setText(String.join(".\n", strings) + "\n \n Информация обязательная для заполения \n" + templateOrder +
+                    "\n Для продолжения введите /order и после заполните и отправьте обязательную информацию о заказе");
+            return sendMessage;
+        }
         userService.saveUser(user);
 
         sendMessage.setText("Заказ успешно размещен");
