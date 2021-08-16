@@ -7,7 +7,6 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +81,7 @@ public class Handler {
         user.setPhone(stringStringMap.get(phone));
         user.setWork(stringStringMap.get(work));
         user.setAddress(stringStringMap.get(address));
+
         List<String> strings = messageValidator.validateOrderDetails(user);
         if (!strings.get(0).equals("All good")) {
             sendMessage.setText(String.join(".\n", strings) + "\n \n Информация обязательная для заполения \n" + templateOrder +

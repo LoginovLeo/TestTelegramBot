@@ -16,7 +16,6 @@
     <properties>
         <java.version>11</java.version>
         <telegram.version>5.2.0</telegram.version>
-        <c3p0.version>0.9.5.2</c3p0.version>
     </properties>
     <dependencies>
         <dependency>
@@ -46,13 +45,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.mchange</groupId>
-            <artifactId>c3p0</artifactId>
-            <version>${c3p0.version}</version>
-        </dependency>
-
-
     </dependencies>
 
     <build>

@@ -31,7 +31,7 @@ public class MessageValidator {
         Validator validator = validatorFactory.getValidator() ;
         Set<ConstraintViolation<User>> validate = validator.validate(user);
         List<String> errors = new ArrayList<>();
-        List<String> good = new ArrayList<>();
+        List<String> validationPassed = new ArrayList<>();
        if (validate.size() > 0){
            for (ConstraintViolation<User> violation:validate){
                String message = violation.getMessage();
@@ -39,7 +39,7 @@ public class MessageValidator {
            }
            return errors;
        }
-        good.add("All good");
-        return good;
+        validationPassed.add("All validation passed");
+        return validationPassed;
     }
 }
