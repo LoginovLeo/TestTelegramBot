@@ -1,9 +1,12 @@
 package com.telegrambots.testBot.model;
 
+import com.telegrambots.testBot.entity.User;
 import org.springframework.stereotype.Component;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.*;
 
 @Component
 public class MessageValidator {
@@ -23,11 +26,20 @@ public class MessageValidator {
         return orderMap;
     }
 
-    public boolean validateOrder(Map<String, String> orderMap) {
-        return orderMap.get("Фамилия") == null
-                || orderMap.get("Имя") == null
-                || orderMap.get("Телефон") == null
-                || orderMap.get("Адрес") == null
-                || orderMap.get("Работы") == null;
+    public  List<String> validateOrderDetails(User user){
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        Validator validator = validatorFactory.getValidator() ;
+        Set<ConstraintViolation<User>> validate = validator.validate(user);
+        List<String> errors = new ArrayList<>();
+        List<String> good = new ArrayList<>();
+       if (validate.size() > 0){
+           for (ConstraintViolation<User> violation:validate){
+               String message = violation.getMessage();
+               errors.add(message);
+           }
+           return errors;
+       }
+        good.add("All good");
+        return good;
     }
 }
