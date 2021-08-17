@@ -15,7 +15,7 @@ public class TelegramCommands {
     private final Handler handler;
     private States state = States.START;
 
-    @Autowired
+
     public TelegramCommands(Handler handler) {
         this.handler = handler;
     }
